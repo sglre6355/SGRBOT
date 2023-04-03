@@ -154,15 +154,6 @@ class MinecraftServerManager(commands.Cog):
     @stop.error
     @restart.error
     async def minecraft_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError) -> None:
-        # Set is_processing to False to allow other commands to be run after an error
-        if hasattr(error, "server"):
-            error.server.is_processing = False
-
-        if isinstance(error, ServerStartFailed):
-            start_failed_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.start_failed, server=error.server)
-            await interaction.edit_original_response(embed=start_failed_embed)
-            return
-
         if isinstance(error, InvalidServerName):
             invalid_server_name_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.invalid_server_name, server_name=error.server_name)
             await interaction.response.send_message(embed=invalid_server_name_embed)
@@ -173,6 +164,10 @@ class MinecraftServerManager(commands.Cog):
             await interaction.response.send_message(embed=server_processing_embed)
             return
 
+        # Set is_processing to False to allow other commands to be run after an error
+        if hasattr(error, "server"):
+            error.server.is_processing = False
+
         if isinstance(error, ServerAlreadyRunning):
             already_running_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.already_running, server=error.server)
             await interaction.response.send_message(embed=already_running_embed)
@@ -181,6 +176,11 @@ class MinecraftServerManager(commands.Cog):
         if isinstance(error, ServerNotRunning):
             not_running_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.not_running, server=error.server)
             await interaction.response.send_message(embed=not_running_embed)
+            return
+
+        if isinstance(error, ServerStartFailed):
+            start_failed_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.start_failed, server=error.server)
+            await interaction.edit_original_response(embed=start_failed_embed)
             return
 
         raise error
