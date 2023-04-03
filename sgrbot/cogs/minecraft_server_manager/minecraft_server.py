@@ -35,6 +35,7 @@ class MinecraftServer:
         self.is_processing: bool = False
         self.status_interaction_message: Optional[InteractionMessage] = None
 
+    @property
     def is_running(self) -> bool:
         if not self.container:
             return False
