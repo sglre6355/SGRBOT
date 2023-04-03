@@ -50,11 +50,11 @@ class MinecraftServerManager(commands.Cog):
             raise ServerProcessingPreviousCommand(server)
 
     def abort_if_running(self, server: MinecraftServer) -> None:
-        if server.is_running():
+        if server.is_running:
             raise ServerAlreadyRunning(server)
 
     def abort_if_not_running(self, server: MinecraftServer) -> None:
-        if not server.is_running():
+        if not server.is_running:
             raise ServerNotRunning(server)
 
     async def delete_status_interaction_message_if_stored(self, server: MinecraftServer) -> None:
