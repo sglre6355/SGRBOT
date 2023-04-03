@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class MinecraftServerEmbedFormat:
-    def __init__(self, *, title: str, description: Optional[str] = None, color: discord.Color, fields: Optional[dict[str, str]] = None) -> None:
+    def __init__(self, *, title: Optional[str] = None, description: Optional[str] = None, color: discord.Color, fields: Optional[dict[str, str]] = None) -> None:
         self.title = title
         self.description = description
         self.color = color
