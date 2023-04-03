@@ -67,12 +67,12 @@ class MinecraftServerEmbedFormats(Enum):
 
 class MinecraftServerEmbed(discord.Embed):
     def __init__(self, embed_properties: MinecraftServerEmbedFormats, *, server_name: Optional[str] = None, server: Optional[MinecraftServer] = None) -> None:
-        if embed_properties.value.title:
+        if type(embed_properties.value.title) is str:
             title = embed_properties.value.title.format(server_name=server_name, server=server)
         else:
             title = embed_properties.value.title
 
-        if embed_properties.value.description:
+        if type(embed_properties.value.description) is str:
             description = embed_properties.value.description.format(server_name=server_name, server=server)
         else:
             description = embed_properties.value.description

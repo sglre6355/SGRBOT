@@ -58,7 +58,7 @@ class MinecraftServerManager(commands.Cog):
             raise ServerNotRunning(server)
 
     async def delete_status_interaction_message_if_stored(self, server: MinecraftServer) -> None:
-        if server.status_interaction_message:
+        if server.status_interaction_message is not None:
             await server.status_interaction_message.delete()
             server.status_interaction_message = None
 
