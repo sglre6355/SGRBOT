@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 from typing import TYPE_CHECKING, Optional
 
 import docker
@@ -52,7 +53,7 @@ class MinecraftServer:
             self.container.reload()
 
             logs = self.container.logs(since=dt).decode("utf-8")
-            if "Done" in logs:
+            if re.search(r"Done \(\d+\.\d+s\)!", logs):
                 break
 
             if self.container.status != "running":
