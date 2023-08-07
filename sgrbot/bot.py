@@ -6,12 +6,13 @@ from typing import Optional
 import discord
 from discord.ext import commands
 
+from .tree import CommandTree
 from .utils import load_config_file
 
 
 class SGRBOT(commands.Bot):
     def __init__(self) -> None:
-        super().__init__(command_prefix="", help_command=None, intents=discord.Intents.all())
+        super().__init__(command_prefix="", help_command=None, tree_cls=CommandTree, intents=discord.Intents.all())
 
         self.config = load_config_file("config/SGRBOT.toml")
 
