@@ -23,6 +23,11 @@ class MinecraftServerEmbedFormats(Enum):
                                               color=discord.Color.red(),
                                               fields={"Server name": "{server.name}"})
 
+    start_timed_out = MinecraftServerEmbedFormat(title="Starting server timed out.",
+                                                 description="Something could be going wrong. If the problem persists, please notify the server owner.",
+                                                 color=discord.Color.red(),
+                                                 fields={"Server name": "{server.name}"})
+
     starting = MinecraftServerEmbedFormat(title="Starting the server...",
                                           description="It may take several minutes for the server to start up.",
                                           color=discord.Color.yellow(),

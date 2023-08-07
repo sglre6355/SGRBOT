@@ -10,7 +10,8 @@ from discord.ext import commands
 from ...utils import load_config_file
 from .embeds import MinecraftServerEmbed, MinecraftServerEmbedFormats
 from .errors import (InvalidServerName, ServerAlreadyRunning, ServerNotRunning,
-                     ServerProcessingPreviousCommand, ServerStartFailed)
+                     ServerProcessingPreviousCommand, ServerStartFailed,
+                     ServerStartTimedOut)
 from .minecraft_server import MinecraftServer
 
 if TYPE_CHECKING:
@@ -182,6 +183,10 @@ class MinecraftServerManager(commands.Cog):
             start_failed_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.start_failed, server=error.server)
             await interaction.edit_original_response(embed=start_failed_embed)
             return
+
+        if isinstance(error, ServerStartTimedOut):
+            start_timed_out_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.start_timed_out, server=error.server)
+            await interaction.response.edit_original_response(embed=start_timed_out_embed)
 
         raise error
 

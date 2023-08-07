@@ -44,3 +44,8 @@ class ServerStartFailed(MinecraftServerError):
     def __init__(self, server: MinecraftServer) -> None:
         self.server = server
         super().__init__(f"Failed to start server `{server.name}`.")
+
+class ServerStartTimedOut(MinecraftServerError):
+    def __init__(self, server: MinecraftServer) -> None:
+        self.server = server
+        super().__init__(f"Starting server `{server.name}` timed out.")

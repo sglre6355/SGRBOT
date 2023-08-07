@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Optional
 import docker
 from docker.errors import NotFound
 
-from .errors import ServerStartFailed
+from .errors import ServerStartFailed, ServerStartTimedOut
 
 if TYPE_CHECKING:
     import datetime
@@ -49,7 +49,10 @@ class MinecraftServer:
         return True
 
     async def wait_until_ready(self, dt: datetime.datetime) -> None:
-        while True:
+        timeout_dt = dt + datetime.timedelta(minutes=5)
+        current_dt = datetime.datetime.utcnow()
+
+        while timeout_dt > current_dt:
             self.container.reload()
 
             logs = self.container.logs(since=dt).decode("utf-8")
@@ -60,6 +63,11 @@ class MinecraftServer:
                 raise ServerStartFailed(self)
 
             await asyncio.sleep(5)
+
+            current_dt = datetime.datetime.utcnow()
+
+        else:
+            raise ServerStartTimedOut(self)
 
     def start(self) -> None:
         self.container.start()
