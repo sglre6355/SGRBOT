@@ -58,11 +58,6 @@ class MinecraftServerManager(commands.Cog):
         if not server.is_running:
             raise ServerNotRunning(server)
 
-    async def delete_status_interaction_message_if_stored(self, server: MinecraftServer) -> None:
-        if server.status_interaction_message is not None:
-            await server.status_interaction_message.delete()
-            server.status_interaction_message = None
-
     async def server_name_autocomplete(self, interaction, current) -> list[app_commands.Choice[str]]:
         return [app_commands.Choice(name=server_name, value=server_name) for server_name in self.server_configs.keys() if current.lower() in server_name.lower()]
 
@@ -77,7 +72,6 @@ class MinecraftServerManager(commands.Cog):
 
         self.abort_if_processing_previous_command(server)
         self.abort_if_running(server)
-        await self.delete_status_interaction_message_if_stored(server)
 
         # Set is_processing to True to prevent other commands from being run while this one is running
         server.is_processing = True
@@ -90,7 +84,7 @@ class MinecraftServerManager(commands.Cog):
         await server.wait_until_ready(dt)
 
         started_embed = MinecraftServerEmbed(MinecraftServerEmbedFormats.started, server=server)
-        server.status_interaction_message = await interaction.edit_original_response(embed=started_embed)
+        await interaction.edit_original_response(embed=started_embed)
 
         # Set is_processing to False to allow other commands to be run
         server.is_processing = False
@@ -106,7 +100,6 @@ class MinecraftServerManager(commands.Cog):
 
         self.abort_if_processing_previous_command(server)
         self.abort_if_not_running(server)
-        await self.delete_status_interaction_message_if_stored(server)
 
         # Set is_processing to True to prevent other commands from being run while this one is running
         server.is_processing = True
@@ -133,7 +126,6 @@ class MinecraftServerManager(commands.Cog):
 
         self.abort_if_processing_previous_command(server)
         self.abort_if_not_running(server)
-        await self.delete_status_interaction_message_if_stored(server)
 
         # Set is_processing to True to prevent other commands from being run while this one is running
         server.is_processing = True
